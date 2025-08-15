@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sodogadzi Komi — Portfolio (WordPress & Custom Coding)</title>
+  <title>Sodogadzi Richard — Portfolio (WordPress & Custom Coding)</title>
   <meta name="description" content="Premium animated developer portfolio with GSAP, Ken Burns zoom, parallax depth, and interactive micro-interactions." />
   <link rel="preconnect" href="https://images.unsplash.com" />
   <!-- GSAP + ScrollTrigger -->
@@ -498,7 +498,7 @@
       transform-style: preserve-3d;
     }
     .testimonial::after {
-      content: """;
+      content: "";
       position: absolute;
       top: 30px;
       left: 30px;
@@ -652,6 +652,113 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+
+:root {
+  --size: 360px;       /* overall widget size */
+  --photo-size: 120px; /* center photo diameter */
+  --icon-size: 56px;   /* logo container diameter */
+  --radius: 40%;       /* distance from center (percent of container) */
+  --duration: 18s;     /* orbit rotation duration */
+}
+
+.tech-circle {
+  width: var(--size);
+  height: var(--size);
+  position: relative;
+  margin: 2rem auto;
+  user-select: none;
+}
+
+.center-photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--photo-size);
+  height: var(--photo-size);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #222;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+.center-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* orbit rotates around center */
+.orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  animation: orbit-rotate var(--duration) linear infinite;
+  transform-origin: center;
+}
+
+/* Individual icon shells (they ride the orbit) */
+.icon {
+  position: absolute;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  transition: transform .22s ease;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* the logo itself counter-rotates so it stays upright as the orbit spins */
+.icon img {
+  width: 68%;
+  height: 68%;
+  display: block;
+  animation: counter-rotate var(--duration) linear infinite;
+}
+
+/* pause orbit on hover & allow icon pop */
+.tech-circle:hover .orbit { animation-play-state: paused; }
+.icon:hover { transform: translate(-50%, -50%) scale(3.82); z-index: 5; }
+
+/* positions computed for 9 icons (evenly distributed) */
+.icon:nth-child(1)  { top: 10.00%; left: 50.00%; } /* top (JS) */
+.icon:nth-child(2)  { top: 19.36%; left: 75.71%; } /* upper-right (WP) */
+.icon:nth-child(3)  { top: 43.05%; left: 89.39%; } /* right-top (Woo) */
+.icon:nth-child(4)  { top: 70.00%; left: 84.64%; } /* right-bottom (Node) */
+.icon:nth-child(5)  { top: 87.59%; left: 63.68%; } /* bottom-right (Express) */
+.icon:nth-child(6)  { top: 87.59%; left: 36.32%; } /* bottom-left (PHP) */
+.icon:nth-child(7)  { top: 70.00%; left: 15.36%; } /* left-bottom (Laravel) */
+.icon:nth-child(8)  { top: 43.05%; left: 10.61%; } /* left-top (TypeScript) */
+.icon:nth-child(9)  { top: 19.36%; left: 24.29%; } /* upper-left (Tailwind) */
+
+/* animation keyframes */
+@keyframes orbit-rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes counter-rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); } /* reverse so logo stays upright */
+}
+
+/* responsive scaling */
+@media (max-width: 520px) {
+  :root { --size: 260px; --photo-size: 88px; --icon-size: 42px; --duration: 14s; }
+}
+
+
     @media (max-width: 680px) {
       .gallery-grid {
         grid-template-columns: 1fr;
@@ -668,18 +775,24 @@
         height: 40px;
       }
     }
+
   </style>
 </head>
 <body>
+  <!-- HTML -->
+
+
   <div class="backdrop" aria-hidden="true"></div>
 
   <!-- NAV -->
   <nav class="nav">
     <div class="container nav-inner">
-      <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
+      <div class="brand"> 
+        <div  aria-hidden="true">
+         <img src="./image/benilogo-removebg-preview.png" alt="" class="logo">
+        </div>
         <div>
-          Sodogadzi Komi<br>
+          Sodogadzi Richard<br>
           <span>WordPress • Custom Coding</span>
         </div>
       </div>
@@ -694,10 +807,35 @@
         <button class="cta" id="hireBtn">Hire Me</button>
       </div>
     </div>
+    
   </nav>
+
+  <!-- HTML -->
+
 
   <!-- HERO -->
   <header class="hero" id="home">
+
+<div class="tech-circle">
+  <div class="center-photo">
+    <img src="./image/benilogo-removebg-preview.png" alt="Your Photo">
+  </div>
+
+  <div class="orbit">
+    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"></div>
+    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg" alt="WordPress"></div>
+    <div class="icon"><img src="./image/woo7.jpeg" alt="WooCommerce"></div>
+    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js"></div>
+    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express.js"></div>
+    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP"></div>
+    <div class="icon"><img src="./image/larave.jpeg" alt="Laravel"></div>
+    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript"></div>
+    <div class="icon"><img src="./image/tailw.jpeg" alt="Tailwind CSS"></div>
+  </div>
+</div>
+
+
+
     <div class="hero-inner">
       <div>
         <h1 class="headline">
@@ -748,11 +886,16 @@
 
       <div class="grid" style="grid-template-columns: 1.1fr .9fr; gap: 26px;">
         <div>
-          <ul class="timeline">
-            <li class="t-item"><strong>2025 — Now:</strong> Freelance full‑stack dev. WordPress themes/plugins, REST APIs, PWAs.</li>
-            <li class="t-item"><strong>2024:</strong> Shipped 20+ client sites, reduced load times by ~45% on average.</li>
-            <li class="t-item"><strong>2023:</strong> Led migration to headless WP (Next.js), improved Core Web Vitals.</li>
-          </ul>
+         <ul class="timeline">
+    <li class="t-item"><strong>2025 — Now:</strong> Freelance full-stack & WordPress developer — custom themes/plugins, REST APIs, PWAs, full-stack apps with JS, PHP, React, Node.js, Express, MongoDB.</li>
+    <li class="t-item"><strong>2024:</strong> Shipped 20+ client sites; optimized performance to reduce load times by ~45% on average.</li>
+    <li class="t-item"><strong>2023:</strong> Led migration to headless WordPress (Next.js), boosting Core Web Vitals and SEO performance.</li>
+    <li class="t-item"><strong>2022:</strong> Built advanced WooCommerce solutions and API integrations; implemented CI/CD pipelines for streamlined WordPress deployments.</li>
+    <li class="t-item"><strong>2021:</strong> Developed full-stack web apps with React, Node.js, Express, MongoDB; added secure authentication and real-time features.</li>
+    <li class="t-item"><strong>2020:</strong> Created small business WordPress sites; built first custom plugin; learned advanced PHP & JavaScript.</li>
+    <li class="t-item"><strong>2019:</strong> Started freelance journey with basic WordPress site builds; explored HTML, CSS, and JavaScript fundamentals.</li>
+</ul>
+
         </div>
         <div class="grid cards">
           <div class="card hover-tilt">
@@ -780,7 +923,7 @@
       
       <div class="tech-logos">
         <div class="tech-item">
-          <img src="https://cdn.worldvectorlogo.com/logos/wordpress-blue.svg" alt="WordPress" class="tech-logo">
+          <img src="./image/wordpress12.jpeg" alt="WordPress" class="tech-logo">
           <span class="tech-name">WordPress</span>
         </div>
         <div class="tech-item">
@@ -788,7 +931,7 @@
           <span class="tech-name">WooCommerce</span>
         </div>
         <div class="tech-item">
-          <img src="https://cdn.worldvectorlogo.com/logos/php-1.svg" alt="PHP" class="tech-logo">
+          <img src="./image/php33.jpeg" alt="PHP" class="tech-logo">
           <span class="tech-name">PHP</span>
         </div>
         <div class="tech-item">
@@ -796,7 +939,7 @@
           <span class="tech-name">Laravel</span>
         </div>
         <div class="tech-item">
-          <img src="https://cdn.worldvectorlogo.com/logos/logo-javascript.svg" alt="JavaScript" class="tech-logo">
+          <img src="./image/js56.jpeg" alt="JavaScript" class="tech-logo">
           <span class="tech-name">JavaScript</span>
         </div>
         <div class="tech-item">
@@ -808,7 +951,7 @@
           <span class="tech-name">React Native</span>
         </div>
         <div class="tech-item">
-          <img src="https://cdn.worldvectorlogo.com/logos/express-109.svg" alt="Express.js" class="tech-logo">
+          <img src="./image/express.js.jpeg" alt="Express.js" class="tech-logo">
           <span class="tech-name">Express.js</span>
         </div>
         <div class="tech-item">
@@ -831,6 +974,14 @@
     </div>
   </section>
 
+
+
+
+
+
+
+
+
   <!-- PROJECTS -->
   <section id="projects">
     <div class="container">
@@ -842,8 +993,8 @@
           <h3>Custom WooCommerce Theme</h3>
           <p>Accessible, fast, and conversion‑focused e‑commerce build.</p>
           <div class="actions">
-            <a class="cta btn-ghost" href="#">Live</a>
-            <a class="cta btn-ghost" href="#">Code</a>
+            <a class="cta btn-ghost" href="https://coveritup.com/">Live</a>
+            <a class="cta btn-ghost" href="https://coveritup.com/">Code</a>
           </div>
         </article>
         <article class="card project hover-zoom hover-tilt">
@@ -851,8 +1002,8 @@
           <h3>Headless WP + SPA</h3>
           <p>WordPress as CMS, custom frontend consuming REST endpoints.</p>
           <div class="actions">
-            <a class="cta btn-ghost" href="#">Live</a>
-            <a class="cta btn-ghost" href="#">Code</a>
+            <a class="cta btn-ghost" href="https://rb.gy/fjfe7">Live</a>
+            <a class="cta btn-ghost" href="https://rb.gy/fjfe7">Code</a>
           </div>
         </article>
         <article class="card project hover-zoom hover-tilt">
@@ -860,8 +1011,8 @@
           <h3>Admin Dashboard</h3>
           <p>Custom JS app with charts, role‑based auth, and real‑time data.</p>
           <div class="actions">
-            <a class="cta btn-ghost" href="#">Live</a>
-            <a class="cta btn-ghost" href="#">Code</a>
+            <a class="cta btn-ghost" href="https://www.koskii.com/">Live</a>
+            <a class="cta btn-ghost" href="https://www.koskii.com/">Code</a>
           </div>
         </article>
       </div>
@@ -1009,7 +1160,7 @@
   </section>
 
   <footer>
-    © <span id="year"></span> Sodogadzi Komi — Built with HTML, CSS, and JavaScript.
+    © <span id="year"></span> Sodogadzi Komi —Let's turn random ideas into game changer solution.
   </footer>
 
   <script>
