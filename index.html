@@ -23,21 +23,27 @@
       --radius: 22px;
       --ring: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 10px 30px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.04);
       --glow: 0 0 30px rgba(97, 244, 222, 0.25);
+      --sidebar-width: 300px;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     html, body {
       height: 100%;
+      overflow-x: hidden;
     }
     body {
-      margin: 0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
       color: var(--text);
-      overflow-x: hidden;
-      scroll-behavior: smooth;
       background: var(--bg);
+      scroll-behavior: smooth;
+      transition: filter 0.3s ease;
+    }
+    body.sidebar-open {
+      overflow: hidden;
     }
 
     /* ===== DYNAMIC BACKDROP ===== */
@@ -118,6 +124,7 @@
       cursor: pointer;
       position: relative;
       overflow: hidden;
+      transition: transform 0.2s ease;
     }
     .cta:hover {
       transform: translateY(-1px);
@@ -128,6 +135,112 @@
       inset: 0;
       background: radial-gradient(500px 120px at var(--x, 50%) -20%, rgba(97, 244, 222, 0.25), transparent 60%);
       transition: 0.15s;
+    }
+
+    /* ===== MOBILE NAVIGATION ===== */
+    .mobile-menu-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 1001;
+      padding: 10px;
+    }
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .hamburger span {
+      display: block;
+      width: 28px;
+      height: 3px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .mobile-menu-btn.active .hamburger span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    .mobile-menu-btn.active .hamburger span:nth-child(2) {
+      opacity: 0;
+    }
+    .mobile-menu-btn.active .hamburger span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .mobile-sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .mobile-sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: var(--sidebar-width);
+      height: 100%;
+      background: rgba(11, 15, 20, 0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      padding: 80px 30px 30px;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .mobile-sidebar.active {
+      transform: translateX(0);
+    }
+
+    .mobile-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .mobile-nav a {
+      display: block;
+      padding: 14px 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .mobile-nav a:hover {
+      background: rgba(97, 244, 222, 0.1);
+      transform: translateX(-4px);
+    }
+
+    .mobile-cta {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--brand), var(--brand-2));
+      color: #001016;
+      text-align: center;
+      font-weight: 800;
+      text-decoration: none;
+      border: none;
+      box-shadow: var(--glow);
     }
 
     /* ===== HERO ===== */
@@ -301,6 +414,11 @@
       position: relative;
       overflow: hidden;
       transform-style: preserve-3d;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), var(--ring);
     }
     .card::after {
       content: "";
@@ -317,6 +435,10 @@
       height: 200px;
       object-fit: cover;
       border-radius: 12px;
+      transition: transform 0.5s ease;
+    }
+    .project:hover img {
+      transform: scale(1.05);
     }
     .project .actions {
       display: flex;
@@ -393,7 +515,7 @@
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
     }
 
-    /* ===== NEW: TECH STACK SECTION ===== */
+    /* ===== TECH STACK SECTION ===== */
     .tech-stack {
       padding: 70px 0;
       position: relative;
@@ -456,7 +578,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* ===== NEW: TESTIMONIALS SECTION ===== */
+    /* ===== TESTIMONIALS SECTION ===== */
     .testimonials {
       padding: 100px 0;
       background: linear-gradient(to bottom, rgba(11, 15, 20, 0.7), rgba(11, 15, 20, 0.4));
@@ -556,7 +678,7 @@
       box-shadow: 0 0 10px rgba(97, 244, 222, 0.5);
     }
 
-    /* ===== NEW: PROJECT GALLERY SECTION ===== */
+    /* ===== PROJECT GALLERY SECTION ===== */
     .project-gallery {
       padding: 100px 0;
       position: relative;
@@ -653,111 +775,26 @@
       }
     }
 
-:root {
-  --size: 360px;       /* overall widget size */
-  --photo-size: 120px; /* center photo diameter */
-  --icon-size: 56px;   /* logo container diameter */
-  --radius: 40%;       /* distance from center (percent of container) */
-  --duration: 18s;     /* orbit rotation duration */
-}
-
-.tech-circle {
-  width: var(--size);
-  height: var(--size);
-  position: relative;
-  margin: 2rem auto;
-  user-select: none;
-}
-
-.center-photo {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--photo-size);
-  height: var(--photo-size);
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid #222;
-  background: #fff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-}
-
-.center-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-/* orbit rotates around center */
-.orbit {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 100%;
-  height: 100%;
-  transform: translate(-50%, -50%);
-  pointer-events: auto;
-  animation: orbit-rotate var(--duration) linear infinite;
-  transform-origin: center;
-}
-
-/* Individual icon shells (they ride the orbit) */
-.icon {
-  position: absolute;
-  width: var(--icon-size);
-  height: var(--icon-size);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-  transition: transform .22s ease;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* the logo itself counter-rotates so it stays upright as the orbit spins */
-.icon img {
-  width: 68%;
-  height: 68%;
-  display: block;
-  animation: counter-rotate var(--duration) linear infinite;
-}
-
-/* pause orbit on hover & allow icon pop */
-.tech-circle:hover .orbit { animation-play-state: paused; }
-.icon:hover { transform: translate(-50%, -50%) scale(3.82); z-index: 5; }
-
-/* positions computed for 9 icons (evenly distributed) */
-.icon:nth-child(1)  { top: 10.00%; left: 50.00%; } /* top (JS) */
-.icon:nth-child(2)  { top: 19.36%; left: 75.71%; } /* upper-right (WP) */
-.icon:nth-child(3)  { top: 43.05%; left: 89.39%; } /* right-top (Woo) */
-.icon:nth-child(4)  { top: 70.00%; left: 84.64%; } /* right-bottom (Node) */
-.icon:nth-child(5)  { top: 87.59%; left: 63.68%; } /* bottom-right (Express) */
-.icon:nth-child(6)  { top: 87.59%; left: 36.32%; } /* bottom-left (PHP) */
-.icon:nth-child(7)  { top: 70.00%; left: 15.36%; } /* left-bottom (Laravel) */
-.icon:nth-child(8)  { top: 43.05%; left: 10.61%; } /* left-top (TypeScript) */
-.icon:nth-child(9)  { top: 19.36%; left: 24.29%; } /* upper-left (Tailwind) */
-
-/* animation keyframes */
-@keyframes orbit-rotate {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(360deg); }
-}
-@keyframes counter-rotate {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(-360deg); } /* reverse so logo stays upright */
-}
-
-/* responsive scaling */
-@media (max-width: 520px) {
-  :root { --size: 260px; --photo-size: 88px; --icon-size: 42px; --duration: 14s; }
-}
-
+    @media (max-width: 768px) {
+      .mobile-menu-btn {
+        display: block;
+      }
+      .menu {
+        display: none;
+      }
+      .nav-inner {
+        padding: 12px 0;
+      }
+      .grid:not(.cards) {
+        grid-template-columns: 1fr;
+      }
+      .contact-form {
+        grid-template-columns: 1fr;
+      }
+      .contact-form textarea {
+        grid-column: span 1;
+      }
+    }
 
     @media (max-width: 680px) {
       .gallery-grid {
@@ -779,24 +816,30 @@
   </style>
 </head>
 <body>
-  <!-- HTML -->
-
-
   <div class="backdrop" aria-hidden="true"></div>
 
   <!-- NAV -->
   <nav class="nav">
     <div class="container nav-inner">
       <div class="brand"> 
-        <div  aria-hidden="true">
-         <img src="./image/benilogo-removebg-preview.png" alt="" class="logo">
+        <div aria-hidden="true">
+          <div class="logo"></div>
         </div>
         <div>
           Sodogadzi Richard<br>
           <span>WordPress • Custom Coding</span>
         </div>
       </div>
-      <div class="menu" role="navigation" aria-label="Primary">
+      
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation">
+        <div class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+      
+      <a class="menu" role="navigation" aria-label="Primary">
         <a href="#home">Home</a>
         <a href="#about">About</a>
         <a href="#tech">Tech Stack</a>
@@ -804,38 +847,28 @@
         <a href="#testimonials">Testimonials</a>
         <a href="#gallery">Gallery</a>
         <a href="#contact">Contact</a>
-        <button class="cta" id="hireBtn">Hire Me</button>
+     <a  href="https://wa.me/99864861" target="_blank"> <button class="cta" id="hireBtn">Hire Me</button></a>
       </div>
     </div>
-    
   </nav>
 
-  <!-- HTML -->
-
+  <!-- Mobile Sidebar Navigation -->
+  <div class="mobile-sidebar-overlay" id="mobileOverlay"></div>
+  <div class="mobile-sidebar" id="mobileSidebar">
+    <div class="mobile-nav">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#tech">Tech Stack</a>
+      <a href="#projects">Projects</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="https://wa.me/99864861" target="_blank" class="mobile-cta" id="mobileCta">Hire Me</a>
+  </div>
 
   <!-- HERO -->
   <header class="hero" id="home">
-
-<div class="tech-circle">
-  <div class="center-photo">
-    <img src="./image/benilogo-removebg-preview.png" alt="Your Photo">
-  </div>
-
-  <div class="orbit">
-    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"></div>
-    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-original.svg" alt="WordPress"></div>
-    <div class="icon"><img src="./image/woo7.jpeg" alt="WooCommerce"></div>
-    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js"></div>
-    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" alt="Express.js"></div>
-    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg" alt="PHP"></div>
-    <div class="icon"><img src="./image/larave.jpeg" alt="Laravel"></div>
-    <div class="icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript"></div>
-    <div class="icon"><img src="./image/tailw.jpeg" alt="Tailwind CSS"></div>
-  </div>
-</div>
-
-
-
     <div class="hero-inner">
       <div>
         <h1 class="headline">
@@ -915,7 +948,7 @@
     </div>
   </section>
 
-  <!-- NEW: TECH STACK SECTION -->
+  <!-- TECH STACK SECTION -->
   <section id="tech" class="tech-stack">
     <div class="container">
       <h2 class="section-title">Tech Stack</h2>
@@ -923,7 +956,7 @@
       
       <div class="tech-logos">
         <div class="tech-item">
-          <img src="./image/wordpress12.jpeg" alt="WordPress" class="tech-logo">
+          <img src="https://cdn.worldvectorlogo.com/logos/wordpress-blue.svg" alt="WordPress" class="tech-logo">
           <span class="tech-name">WordPress</span>
         </div>
         <div class="tech-item">
@@ -931,7 +964,7 @@
           <span class="tech-name">WooCommerce</span>
         </div>
         <div class="tech-item">
-          <img src="./image/php33.jpeg" alt="PHP" class="tech-logo">
+          <img src="https://cdn.worldvectorlogo.com/logos/php-1.svg" alt="PHP" class="tech-logo">
           <span class="tech-name">PHP</span>
         </div>
         <div class="tech-item">
@@ -939,7 +972,7 @@
           <span class="tech-name">Laravel</span>
         </div>
         <div class="tech-item">
-          <img src="./image/js56.jpeg" alt="JavaScript" class="tech-logo">
+          <img src="https://cdn.worldvectorlogo.com/logos/logo-javascript.svg" alt="JavaScript" class="tech-logo">
           <span class="tech-name">JavaScript</span>
         </div>
         <div class="tech-item">
@@ -951,7 +984,7 @@
           <span class="tech-name">React Native</span>
         </div>
         <div class="tech-item">
-          <img src="./image/express.js.jpeg" alt="Express.js" class="tech-logo">
+          <img src="https://cdn.worldvectorlogo.com/logos/express-109.svg" alt="Express.js" class="tech-logo">
           <span class="tech-name">Express.js</span>
         </div>
         <div class="tech-item">
@@ -973,14 +1006,6 @@
       </div>
     </div>
   </section>
-
-
-
-
-
-
-
-
 
   <!-- PROJECTS -->
   <section id="projects">
@@ -1019,7 +1044,7 @@
     </div>
   </section>
 
-  <!-- NEW: TESTIMONIALS SECTION -->
+  <!-- TESTIMONIALS SECTION -->
   <section id="testimonials" class="testimonials">
     <div class="container">
       <h2 class="section-title">Client Testimonials</h2>
@@ -1068,7 +1093,7 @@
     </div>
   </section>
 
-  <!-- NEW: PROJECT GALLERY SECTION -->
+  <!-- PROJECT GALLERY SECTION -->
   <section id="gallery" class="project-gallery">
     <div class="container">
       <h2 class="section-title">Project Gallery</h2>
@@ -1160,10 +1185,31 @@
   </section>
 
   <footer>
-    © <span id="year"></span> Sodogadzi Komi —Let's turn random ideas into game changer solution.
+    © <span id="year"></span> Sodogadzi Richard — Let's turn random ideas into game-changing solutions.
   </footer>
 
   <script>
+    // ===== Mobile Navigation =====
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const body = document.body;
+    
+    function toggleMobileMenu() {
+      mobileMenuBtn.classList.toggle('active');
+      mobileOverlay.classList.toggle('active');
+      mobileSidebar.classList.toggle('active');
+      body.classList.toggle('sidebar-open');
+    }
+    
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    mobileOverlay.addEventListener('click', toggleMobileMenu);
+    
+    // Close sidebar when clicking on links
+    document.querySelectorAll('.mobile-nav a').forEach(link => {
+      link.addEventListener('click', toggleMobileMenu);
+    });
+    
     // ===== Magnetic hover for CTA =====
     const hireBtn = document.getElementById('hireBtn');
     hireBtn.addEventListener('mousemove', (e) => {
@@ -1268,7 +1314,7 @@
       img.addEventListener('pointerleave', ()=> gsap.to(img, {scale:1.0, duration:.35, ease:'power2.out'}));
     });
 
-    // ===== NEW: TESTIMONIALS CAROUSEL =====
+    // ===== TESTIMONIALS CAROUSEL =====
     const testimonialsTrack = document.getElementById('testimonialsTrack');
     const testimonialDots = document.querySelectorAll('.testimonial-dot');
     let testimonialIndex = 0;
@@ -1304,7 +1350,7 @@
       });
     });
 
-    // ===== NEW: GALLERY ANIMATIONS =====
+    // ===== GALLERY ANIMATIONS =====
     gsap.utils.toArray('.gallery-item').forEach((item, i) => {
       gsap.to(item, {
         scrollTrigger: {
